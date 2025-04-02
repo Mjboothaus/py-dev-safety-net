@@ -6,6 +6,9 @@ show-all-files:
     ls -latr
 
 
+app:
+    streamlit run app/main.py
+
 docker-build:
     docker build -t iris-streamlit-app .
 

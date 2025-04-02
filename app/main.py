@@ -1,5 +1,10 @@
+from pathlib import Path
+
 import duckdb
 import pandas as pd
+import plotly.express as px
+import streamlit as st
+from great_tables import GT
 
 
 def load_and_save_iris(method="duckdb"):
@@ -36,18 +41,13 @@ def load_and_save_iris(method="duckdb"):
         print(f"An error occurred: {e}")
 
 
-import streamlit as st
-import duckdb
-import pandas as pd
-import plotly.express as px
-from great_tables import GT
-
 # Connect to DuckDB
 conn = duckdb.connect("iris.duckdb")
 
-
 # Load data from DuckDB
 def load_data(query="SELECT * FROM iris"):
+    if not Path("iris.duckdb").exists():
+        load_and_save_iris(method="duckdb")
     return conn.execute(query).fetchdf()
 
 
@@ -102,7 +102,7 @@ def main_app():
         st.plotly_chart(fig_filtered, use_container_width=True)
 
         # Custom SQL Query Input and Execution
-        
+
         st.write("### Run Custom SQL Query")
         user_query = st.text_area("Enter your SQL query:", default_query)
         if st.button("Run Query"):
