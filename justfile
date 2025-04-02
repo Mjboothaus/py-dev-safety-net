@@ -12,3 +12,6 @@ docker-build:
 docker-run:
     lsof -i :8501 | grep LISTEN | awk '{print $2}' | xargs -r kill
     docker run -p 8501:8501 iris-streamlit-app
+
+reqs:
+    uv export --format requirements-txt > requirements.txt
