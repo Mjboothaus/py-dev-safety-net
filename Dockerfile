@@ -9,9 +9,13 @@ WORKDIR /app
 COPY pyproject.toml uv.lock /app/
 RUN uv sync --frozen --no-dev
 
+# Add the virtual environment's bin directory to PATH
+ENV PATH="/app/.venv/bin:$PATH"
+
 # Copy application code
 COPY . /app
 
 EXPOSE 8501
 
 CMD ["streamlit", "run", "app/main.py", "--server.port=8501", "--server.address=0.0.0.0"]
+
