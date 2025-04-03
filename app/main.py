@@ -106,7 +106,7 @@ def main_app():
         user_query = st.text_area("Enter your SQL query:", default_query)
         if st.button("Run Query"):
             try:
-                query_result = load_data(user_query)
+                query_result = conn.sql(user_query).df()
                 st.write("Query Results:")
                 st.dataframe(query_result)
             except Exception as e:
