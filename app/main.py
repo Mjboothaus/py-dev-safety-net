@@ -41,14 +41,11 @@ def load_and_save_iris(method="duckdb"):
         print(f"An error occurred: {e}")
 
 
-# Connect to DuckDB
-conn = duckdb.connect("iris.duckdb")
-
 # Load data from DuckDB
-def load_data(query="SELECT * FROM iris"):
+def connect_data():
     if not Path("iris.duckdb").exists():
         load_and_save_iris(method="duckdb")
-    return conn.execute(query).fetchdf()
+    return duckdb.connect("iris.duckdb")
 
 
 # Streamlit UI
@@ -63,13 +60,15 @@ def main_app():
     ORDER BY count DESC;
     """
 
+    conn = connect_data()
+
     # Display data using GreatTables for interactive exploration
 
     tab1, tab2 = st.tabs(["Data", "Visualisation"])
 
     with tab2:
         st.write("### Interactive Data Exploration")
-        df = load_data()
+        df = conn.execute("SELECT * FROM iris").fetchdf()
         table = GT(df)
 
         st.markdown(table.as_raw_html(), unsafe_allow_html=True)
